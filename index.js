@@ -14,8 +14,23 @@ async function main() {
 } 
 
 const userSchema  = new mongoose.Schema({
-    username: String,
-    password: String
+    username: { 
+        type: String, 
+        required: true,
+        unique: true,
+        validate: {
+            validator: function(v) {
+              return /([A-Z])\w+/.test(v);
+            },
+            message: props => `${props.value} is not a valid username!`
+        }
+    },
+    password: {
+        type: String,
+        unique: true,
+        minLength: 8,
+    },
+    token: String
 });
 
 const User = mongoose.model('User', userSchema);
